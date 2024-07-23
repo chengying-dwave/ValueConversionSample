@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:conv="using:ValueConversionSample.Converter"
-        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="200"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="300"
         x:Class="ValueConversionSample.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -81,6 +81,21 @@
                     </NumericUpDown.Value>
                 </NumericUpDown>
             </Grid>
+        </TabItem>
+        <TabItem Header="FuncValueConverter">
+            <StackPanel Spacing="5">
+                <TextBox Watermark="Type the color to parse (e.g.: red, green, blue, #FF112233)">
+                    <TextBox.InnerLeftContent>
+                        <Ellipse
+                            Width="20"
+                            Height="20"
+                            Margin="2"
+                            Fill="{Binding $parent[TextBox].Text, Converter={x:Static conv:FuncValueConverters.StringToBrushConverter}}"
+                            Stroke="Gray"
+                            StrokeThickness="1" />
+                    </TextBox.InnerLeftContent>
+                </TextBox>
+            </StackPanel>
         </TabItem>
     </TabControl>
 </Window>
