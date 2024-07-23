@@ -15,6 +15,8 @@
         <conv:MathAddConverter x:Key="MathAddConverter" />
         <!--  This Resource will be used as our ConverterParameter  -->
         <x:Decimal x:Key="MyConverterParameter">2</x:Decimal>
+        <!--  Add the MathMultiConverter  -->
+        <conv:MathMultiConverter x:Key="MathMultiConverter" />
     </Window.Resources>
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -22,19 +24,63 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
-        <TextBlock Grid.Row="0"
-                   Grid.Column="0"
-                   Text="Number 1" />
-        <NumericUpDown Grid.Row="0"
-                       Grid.Column="1"
-                       Value="{Binding Number1}" />
+    <TabControl>
+        <TabItem Header="IValueConverter">
+            <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Text="Number 1" />
+                <NumericUpDown Grid.Row="0"
+                               Grid.Column="1"
+                               Value="{Binding Number1}" />
 
-        <TextBlock Grid.Row="1"
-                   Grid.Column="0"
-                   Text="Sum" />
-        <NumericUpDown Grid.Row="1"
-                       Grid.Column="1"
-                       Value="{Binding Number1, Converter={StaticResource MathAddConverter}, ConverterParameter={StaticResource MyConverterParameter}}" />
-    </Grid>
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Text="Sum" />
+                <NumericUpDown Grid.Row="1"
+                               Grid.Column="1"
+                               Value="{Binding Number1, Converter={StaticResource MathAddConverter}, ConverterParameter={StaticResource MyConverterParameter}}" />
+            </Grid>
+        </TabItem>
+        <TabItem Header="IMultiValueConverter">
+            <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto">
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Text="Operator" />
+                <ComboBox Grid.Row="0"
+                          Grid.Column="1"
+                          ItemsSource="{Binding AvailableMathOperators}"
+                          SelectedItem="{Binding Operator}" />
+
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Text="Number 1" />
+                <NumericUpDown Grid.Row="1"
+                               Grid.Column="1"
+                               Value="{Binding Number1}" />
+
+                <TextBlock Grid.Row="2"
+                           Grid.Column="0"
+                           Text="Number 2" />
+                <NumericUpDown Grid.Row="2"
+                               Grid.Column="1"
+                               Value="{Binding Number2}" />
+
+                <TextBlock Grid.Row="3"
+                           Grid.Column="0"
+                           Text="Result" />
+                <NumericUpDown Grid.Row="3"
+                               Grid.Column="1"
+                               IsReadOnly="True">
+                    <NumericUpDown.Value>
+                        <MultiBinding Converter="{StaticResource MathMultiConverter}" Mode="OneWay">
+                            <Binding Path="Operator" />
+                            <Binding Path="Number1" />
+                            <Binding Path="Number2" />
+                        </MultiBinding>
+                    </NumericUpDown.Value>
+                </NumericUpDown>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>
